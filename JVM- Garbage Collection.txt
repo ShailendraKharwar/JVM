@@ -1,0 +1,47 @@
+						   Garbage Collection
+Garbage Collection is the process of freeing space in the heap for allocation of new objects. One of the best feature of
+Java is the automatic garbage collection. Garbage Collector is the program running in the background that looks into all
+the objects in the memory and find out objects that are not referenced by any part of the program. All these unreferenced
+objects are deleted and space is reclaimed for allocation to other objects. One of the basic way of garbage collection
+involves three steps:
+
+* Marking: This is the first step where garbage collector identifies which objects are in use and which ones are not in use
+* Normal Deletion: Garbage collector removes the unused objects and reclaims the free space to be allocated to other objects
+* Deletion with compacting: For better performance, after deleting unused objects, all the survived objects can be moved to
+  be together. This will increase the performance of allocation of memory to newer objects
+
+
+Mark and Sweep Model of Garbage collection
+JVM uses the mark and sweep garbage collection model for performing garbage collection of the whole heap. A mark and sweep
+garbage collection consists of two phases, the mark phase and the sweep phase.
+
+During the mark phase, all the objects that are reachable from Java threads, native handlers and other root sources are marked
+as alive, as well as the objects that are reachable from these objects and so forth. This process identifies and marks all
+objects that are still used, and the rest can be considered garbage.
+
+During the sweep phase, the heap is traversed to find the gaps between the live objects. These gaps are recorded in a free
+list and are made available for new object allocation.
+
+
+Java Garbage Collection Types
+
+There are five types of garbage collection types that we can use in our applications. We just need to use JVM switch to enable
+the garbage collection strategy for the application.
+
+* Serial GC (-XX:+UseSerialGC): Serial GC uses the simple mark-sweep-compact approach for young and old generations garbage 
+  collection that is, Minor and Major GC
+* Parallel GC (-XX:+UseParallelGC): Parallel GC is same as Serial GC except that, it spawns N threads for young generation
+  garbage collection where N is the number of CPU cores in the system. We can control the number of threads using 
+  –XX:ParallelGCThreads=n JVM option
+* Parallel Old GC (-XX:+UseParallelOldGC): This is same as Parallel GC except that it uses multiple threads for both young
+  generation and old generation garbage collection
+* Concurrent Mark Sweep (CMS) Collector (-XX:+UseConcMarkSweepGC): CMS is also referred as concurrent low pause collector. It 
+  does the garbage collection for old generation. CMS collector tries to minimize the pauses due to garbage collection by doing 
+  most of the garbage collection work concurrently within the application threads. CMS collector on young generation uses the same
+  algorithm as that of the parallel collector. This garbage collector is suitable for responsive applications where we can’t 
+  afford longer pause times. We can limit the number of threads in CMS collector using –XX:ParallelCMSThreads=n JVM option
+* G1 Garbage Collector (-XX:+UseG1GC): The garbage first or G1 Garbage Collector is available from Java 7 and its long term goal is
+  to replace the CMS collector. The G1 collector is a parallel, concurrent and incrementally compact low-pause garbage collector.
+  Garbage first collector doesn’t work like other collectors and there is no concept of young and old generation space. It divides 
+  the heap space into multiple equal-sized heap regions. When a garbage collector is invoked, it first collects the region with
+  lesser live data, hence “Garbage First”
